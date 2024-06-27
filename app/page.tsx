@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import MovieCard from "@/components/MovieCard";
 import { MovieItem } from "@/utils/types";
 
@@ -18,23 +19,29 @@ export default async function Home() {
   } catch (error) {
     console.error("Error fetching data:", error);
   }
-
+ 
   return (
-    <div className="flex flex-col">
-      <div className="relative overflow-scroll">
-        {popularMovies.map((movie: MovieItem) => (
-          <MovieCard key={movie.id} {...movie} />
-        ))}
+    <>
+      <div className="relative">
+        <Header  />
       </div>
 
-      <div className="flex items-center justify-between bg-blue-600  px-4 text-center text-white fixed bottom-0 w-full">
-        <div className="fav w-full text-center border-r border-white  py-2">
-          <p>Favorite</p>
+      <div className="flex flex-col">
+        <div className="relative overflow-scroll">
+          {popularMovies.map((movie: MovieItem) => (
+            <MovieCard key={movie.id} {...movie} />
+          ))}
         </div>
-        <div className="Wishlist w-full text-center py-2">
-          <p>Wishlist</p>
+
+        <div className="flex items-center justify-between bg-blue-600  px-4 text-center text-white fixed bottom-0 w-full">
+          <div className="fav w-full text-center border-r border-white  py-2">
+            <p>Favorite</p>
+          </div>
+          <div className="Wishlist w-full text-center py-2">
+            <p>Wishlist</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
