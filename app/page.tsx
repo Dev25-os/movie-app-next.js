@@ -1,29 +1,33 @@
+"use client";
 import Header from "@/components/Header";
 import MovieCard from "@/components/MovieCard";
 import { MovieItem } from "@/utils/types";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-export default async function Home() {
-  // const [popularMovies, setPopularMovies] = useState([]);
-  let popularMovies = [];
+export default function Home() {
+  const [popularMovies, setPopularMovies] = useState([]);
 
-  try {
-    const response = await fetch(
-      `${process.env.BASE_URL}/popular?api_key=${process.env.TMDB_API_KEY}`
-    );
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.BASE_URL}/popular?api_key=${process.env.TMDB_API_KEY}`
+      );
+
+      setPopularMovies(response.data.results);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    const data = await response.json();
-    popularMovies = data.results;
-    console.log(popularMovies[0]);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
- 
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="relative">
-        <Header  />
+        <Header setPopularMovies={setPopularMovies} />
       </div>
 
       <div className="flex flex-col">

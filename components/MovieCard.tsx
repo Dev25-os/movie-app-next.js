@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MovieItem } from "@/utils/types";
 
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
@@ -52,6 +52,10 @@ const MovieCard = ({
   const handleToggleWishlist = () => {
     setIsWishlist(!isWishlist);
   };
+
+  useEffect(() => {
+    console.log("cardd");
+  }, []);
 
   return (
     <div className="max-w-xs rounded overflow-hidden shadow-lg m-4">

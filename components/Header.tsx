@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { type } from "os";
 
-const Header = () => {
+const Header = ({ setPopularMovies }: any) => {
   const [filter, setFilter] = useState(false);
   const [genre, setGenre] = useState([]);
   const [languages, setLanguages] = useState([]);
@@ -57,17 +57,21 @@ const Header = () => {
     setSelectedLanguage(e.target.value);
   };
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = async () => {
     const filters = {
       genres: selectedGenres,
-        languages: selectedLanguage,
+      languages: selectedLanguage,
       releaseDateFrom,
       releaseDateTo,
-      userScoreMin,
-      userScoreMax,
+      // userScoreMin,
+      // userScoreMax,
     };
     console.log("Filters:", filters);
-    // You can implement logic here to apply filters (e.g., fetch filtered movies)
+
+    let response = await axios.get(
+      `https://api.themoviedb.org/3/discover/movie?api_key=9294efc8e8a75f982b51880b836283e1&with_genres=${selectedGenres}&primary_release_date.gte=${releaseDateFrom}&primary_release_date.lte=${releaseDateTo}&language=${selectedLanguage}`
+    );
+    setPopularMovies(response.data.results);
   };
   return (
     <div>
@@ -112,7 +116,9 @@ const Header = () => {
                   value={option.english_name}
                   style={{
                     backgroundColor:
-                      option.english_name === selectedLanguage ? "lightblue" : "white",
+                      option.english_name === selectedLanguage
+                        ? "lightblue"
+                        : "white",
                   }}
                 >
                   {option.english_name}
@@ -142,7 +148,7 @@ const Header = () => {
           </div>
 
           {/* User Score */}
-          <div className="px-2 py-4">
+          {/* <div className="px-2 py-4">
             <label className="block mb-1">User Score:</label>
             <div className="flex items-center gap-2">
               <input
@@ -164,8 +170,8 @@ const Header = () => {
                 onChange={(e) => setUserScoreMax(parseInt(e.target.value))}
                 className="w-full"
               />
-            </div>
-          </div>
+            </div> 
+          </div>*/}
 
           {/* Apply Filters Button */}
           <div className="px-2 py-4">
