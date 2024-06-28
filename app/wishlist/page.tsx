@@ -8,7 +8,6 @@ const Wishlist = () => {
   const [wishlistMovies, setWishlistMovies] = useState<MovieItem[]>([]);
 
   useEffect(() => {
-    // Fetch wishlist movies from local storage on component mount
     const storedWishlistJson = localStorage.getItem("wishlist");
     const storedWishlist: MovieItem[] = storedWishlistJson
       ? JSON.parse(storedWishlistJson)

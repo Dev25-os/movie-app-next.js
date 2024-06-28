@@ -6,14 +6,12 @@ import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWishlist, setIsWishlist] = useState(false);
-  const [rating, setRating] = useState(0); // State to store the selected rating, default to 0
+  const [rating, setRating] = useState(0); 
 
-  // Function to handle selecting a star rating
   const handleSetRating = (value: number) => {
     setRating(value);
   };
 
-  // JSX for star icons
   const renderStarIcons = (maxStars: number) => {
     const stars = [];
     for (let i = 1; i <= maxStars; i++) {
@@ -32,7 +30,6 @@ const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
     return stars;
   };
 
-  // Example: render 5 stars
   const maxStars = 5;
 
   useEffect(() => {
@@ -49,7 +46,6 @@ const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
       : [];
     // const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 
-    // Check if this movie is already in favorites or wishlist
     setIsFavorite(storedFavorites.some((movie) => movie.title === title));
     setIsWishlist(storedWishlist.some((movie) => movie.title === title));
   }, [title]);
@@ -75,7 +71,6 @@ const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
       ];
     }
 
-    // Update state and local storage
     setIsFavorite(!isFavorite);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
@@ -90,19 +85,16 @@ const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
     let updatedWishlist = [];
 
     if (isWishlist) {
-      // Remove from wishlist
       updatedWishlist = storedWishlist.filter(
         (movie: MovieItem) => movie.title !== title
       );
     } else {
-      // Add to wishlist
       updatedWishlist = [
         ...storedWishlist,
         { title, poster_path, release_date },
       ];
     }
 
-    // Update state and local storage
     setIsWishlist(!isWishlist);
     localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
   };

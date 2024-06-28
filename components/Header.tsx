@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { type } from "os";
 
 const Header = ({ setPopularMovies }: any) => {
   const [filter, setFilter] = useState(false);
