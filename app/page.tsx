@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import MovieCard from "@/components/MovieCard";
 import { MovieItem } from "@/utils/types";
 import axios from "axios";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -54,19 +55,20 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col">
-        <div className="relative overflow-scroll">
+        <div className="relative  sm:grid sm:grid-cols-3">
           {popularMovies.map((movie: MovieItem) => (
             <MovieCard key={movie.id} {...movie} />
           ))}
         </div>
 
         <div className="flex items-center justify-between bg-blue-600  px-4 text-center text-white fixed bottom-0 w-full">
-          <div className="fav w-full text-center border-r border-white  py-2">
+          <Link href={"/favorites"} className="fav w-full text-center border-r border-white  py-2" 
+          >
             <p>Favorite</p>
-          </div>
-          <div className="Wishlist w-full text-center py-2">
+          </Link>
+          <Link href={"/wishlist"} className="Wishlist w-full text-center py-2">
             <p>Wishlist</p>
-          </div>
+          </Link>
         </div>
       </div>
     </>

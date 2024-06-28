@@ -1,18 +1,12 @@
-"use client";
 import { useEffect, useState } from "react";
 import { MovieItem } from "@/utils/types";
-
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 
 const MovieCard = ({
-  original_title,
   title,
   poster_path,
-  video,
   release_date,
-  vote_count,
-  vote_average,
 }: MovieItem) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWishlist, setIsWishlist] = useState(false);
@@ -45,17 +39,49 @@ const MovieCard = ({
   // Example: render 5 stars
   const maxStars = 5;
 
+  useEffect(() => {
+    // Check local storage for existing favorites and wishlist on component mount
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    
+    // Check if this movie is already in favorites or wishlist
+    setIsFavorite(storedFavorites.some(movie => movie.title === title));
+    setIsWishlist(storedWishlist.some(movie => movie.title === title));
+  }, [title]);
+
   const handleToggleFavorite = () => {
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    let updatedFavorites = [];
+
+    if (isFavorite) {
+      // Remove from favorites
+      updatedFavorites = storedFavorites.filter((movie) => movie.title !== title);
+    } else {
+      // Add to favorites
+      updatedFavorites = [...storedFavorites, { title, poster_path, release_date }];
+    }
+
+    // Update state and local storage
     setIsFavorite(!isFavorite);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
   const handleToggleWishlist = () => {
-    setIsWishlist(!isWishlist);
-  };
+    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let updatedWishlist = [];
 
-  useEffect(() => {
-    console.log("cardd");
-  }, []);
+    if (isWishlist) {
+      // Remove from wishlist
+      updatedWishlist = storedWishlist.filter((movie) => movie.title !== title);
+    } else {
+      // Add to wishlist
+      updatedWishlist = [...storedWishlist, { title, poster_path, release_date }];
+    }
+
+    // Update state and local storage
+    setIsWishlist(!isWishlist);
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+  };
 
   return (
     <div className="max-w-xs rounded overflow-hidden shadow-lg m-4">
