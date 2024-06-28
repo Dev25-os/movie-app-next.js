@@ -3,22 +3,18 @@ import { MovieItem } from "@/utils/types";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
 
-const MovieCard = ({
-  title,
-  poster_path,
-  release_date,
-}: MovieItem) => {
+const MovieCard = ({ title, poster_path, release_date }: MovieItem) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWishlist, setIsWishlist] = useState(false);
   const [rating, setRating] = useState(0); // State to store the selected rating, default to 0
 
   // Function to handle selecting a star rating
-  const handleSetRating = (value) => {
+  const handleSetRating = (value: number) => {
     setRating(value);
   };
 
   // JSX for star icons
-  const renderStarIcons = (maxStars) => {
+  const renderStarIcons = (maxStars: number) => {
     const stars = [];
     for (let i = 1; i <= maxStars; i++) {
       stars.push(
@@ -40,25 +36,43 @@ const MovieCard = ({
   const maxStars = 5;
 
   useEffect(() => {
-    // Check local storage for existing favorites and wishlist on component mount
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    
+    const storedFavoritesJson = localStorage.getItem("favorites");
+    const storedFavorites: MovieItem[] = storedFavoritesJson
+      ? JSON.parse(storedFavoritesJson)
+      : [];
+
+    // const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    const storedWishlistJson = localStorage.getItem("wishlist");
+    const storedWishlist: MovieItem[] = storedWishlistJson
+      ? JSON.parse(storedWishlistJson)
+      : [];
+    // const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
     // Check if this movie is already in favorites or wishlist
-    setIsFavorite(storedFavorites.some(movie => movie.title === title));
-    setIsWishlist(storedWishlist.some(movie => movie.title === title));
+    setIsFavorite(storedFavorites.some((movie) => movie.title === title));
+    setIsWishlist(storedWishlist.some((movie) => movie.title === title));
   }, [title]);
 
   const handleToggleFavorite = () => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedFavoritesJson = localStorage.getItem("favorites");
+    const storedFavorites: MovieItem[] = storedFavoritesJson
+      ? JSON.parse(storedFavoritesJson)
+      : [];
+    // const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     let updatedFavorites = [];
 
     if (isFavorite) {
       // Remove from favorites
-      updatedFavorites = storedFavorites.filter((movie) => movie.title !== title);
+      updatedFavorites = storedFavorites.filter(
+        (movie) => movie.title !== title
+      );
     } else {
       // Add to favorites
-      updatedFavorites = [...storedFavorites, { title, poster_path, release_date }];
+      updatedFavorites = [
+        ...storedFavorites,
+        { title, poster_path, release_date },
+      ];
     }
 
     // Update state and local storage
@@ -67,15 +81,25 @@ const MovieCard = ({
   };
 
   const handleToggleWishlist = () => {
-    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const storedWishlistJson = localStorage.getItem("wishlist");
+    const storedWishlist: MovieItem[] = storedWishlistJson
+      ? JSON.parse(storedWishlistJson)
+      : [];
+
+    // const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
     let updatedWishlist = [];
 
     if (isWishlist) {
       // Remove from wishlist
-      updatedWishlist = storedWishlist.filter((movie) => movie.title !== title);
+      updatedWishlist = storedWishlist.filter(
+        (movie: MovieItem) => movie.title !== title
+      );
     } else {
       // Add to wishlist
-      updatedWishlist = [...storedWishlist, { title, poster_path, release_date }];
+      updatedWishlist = [
+        ...storedWishlist,
+        { title, poster_path, release_date },
+      ];
     }
 
     // Update state and local storage

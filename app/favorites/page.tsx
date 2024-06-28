@@ -1,22 +1,27 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
+import { MovieItem, MovieItemType } from "@/utils/types";
 
 const Favorites = () => {
-  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [favoriteMovies, setFavoriteMovies] = useState<MovieItem[]>([]);
 
   useEffect(() => {
-    // Fetch favorite movies from local storage on component mount
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedFavoritesJson = localStorage.getItem("favorites");
+    const storedFavorites: MovieItem[] = storedFavoritesJson
+      ? JSON.parse(storedFavoritesJson)
+      : [];
+
     setFavoriteMovies(storedFavorites);
   }, []);
 
-  const handleRemoveFavorite = (title) => {
-    // Remove a movie from favorites in local storage and update state
-    const updatedFavorites = favoriteMovies.filter((movie) => movie.title !== title);
+  const handleRemoveFavorite = (title: string) => {
+    const updatedFavorites = favoriteMovies.filter(
+      (movie: MovieItemType) => movie.title !== title
+    );
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     setFavoriteMovies(updatedFavorites);
   };
@@ -28,7 +33,7 @@ const Favorites = () => {
           Movie App
         </Link>
       </div>
-      
+
       <h1 className="pt-4 font-semibold px-3">Favorite Movies</h1>
 
       {favoriteMovies.length === 0 && (
@@ -36,8 +41,11 @@ const Favorites = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {favoriteMovies.map((movie) => (
-          <div key={movie.title} className="max-w-xs rounded overflow-hidden shadow-lg">
+        {favoriteMovies.map((movie: MovieItemType) => (
+          <div
+            key={movie.title}
+            className="max-w-xs rounded overflow-hidden shadow-lg"
+          >
             <div className="relative">
               <img
                 className="w-full"

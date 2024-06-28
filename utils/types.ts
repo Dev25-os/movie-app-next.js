@@ -15,3 +15,8 @@ export type MovieItem = {
     vote_count: number;
   };
   
+  export interface MovieItemType {
+    title: string;
+    poster_path: string;
+    release_date: string;
+  }

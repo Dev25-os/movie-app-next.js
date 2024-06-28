@@ -7,7 +7,7 @@ const Header = ({ setPopularMovies }: any) => {
   const [filter, setFilter] = useState(false);
   const [genre, setGenre] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [releaseDateFrom, setReleaseDateFrom] = useState("");
   const [releaseDateTo, setReleaseDateTo] = useState("");
@@ -43,7 +43,7 @@ const Header = ({ setPopularMovies }: any) => {
   }, []);
 
   // Handle genre selection
-  const handleGenreSelect = (id) => {
+  const handleGenreSelect = (id: number) => {
     const index = selectedGenres.indexOf(id);
     if (index === -1) {
       setSelectedGenres([...selectedGenres, id]);
@@ -53,7 +53,7 @@ const Header = ({ setPopularMovies }: any) => {
   };
 
   // Handle language selection
-  const handleLangChange = (e) => {
+  const handleLangChange = (e: any) => {
     setSelectedLanguage(e.target.value);
   };
 
@@ -96,7 +96,7 @@ const Header = ({ setPopularMovies }: any) => {
           <div className="px-2 py-4">
             <p className="mb-2 font-semibold">Genres:</p>
             <div className="flex flex-wrap gap-2">
-              {genre.map((item) => (
+              {genre.map((item: { id: number; name: string }) => (
                 <div
                   key={item.id}
                   className={`cursor-pointer border rounded-full p-1 ${
@@ -116,7 +116,7 @@ const Header = ({ setPopularMovies }: any) => {
           <div>
             <p>Languages</p>
             <select value={selectedLanguage} onChange={handleLangChange}>
-              {languages.map((option, index) => (
+              {languages.map((option: { english_name: string }, index) => (
                 <option
                   key={index}
                   value={option.english_name}

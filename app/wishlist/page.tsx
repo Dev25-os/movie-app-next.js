@@ -1,20 +1,25 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoBookmark } from "react-icons/io5";
+import { MovieItem, MovieItemType } from "@/utils/types";
 
 const Wishlist = () => {
-  const [wishlistMovies, setWishlistMovies] = useState([]);
+  const [wishlistMovies, setWishlistMovies] = useState<MovieItem[]>([]);
 
   useEffect(() => {
     // Fetch wishlist movies from local storage on component mount
-    const storedWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const storedWishlistJson = localStorage.getItem("wishlist");
+    const storedWishlist: MovieItem[] = storedWishlistJson
+      ? JSON.parse(storedWishlistJson)
+      : [];
     setWishlistMovies(storedWishlist);
   }, []);
 
-  const handleRemoveFromWishlist = (title) => {
-    // Remove a movie from wishlist in local storage and update state
-    const updatedWishlist = wishlistMovies.filter((movie) => movie.title !== title);
+  const handleRemoveFromWishlist = (title: string) => {
+    const updatedWishlist = wishlistMovies.filter(
+      (movie: MovieItemType) => movie.title !== title
+    );
     localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
     setWishlistMovies(updatedWishlist);
   };
@@ -34,8 +39,11 @@ const Wishlist = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {wishlistMovies.map((movie) => (
-          <div key={movie.title} className="max-w-xs rounded overflow-hidden shadow-lg">
+        {wishlistMovies.map((movie: MovieItemType) => (
+          <div
+            key={movie.title}
+            className="max-w-xs rounded overflow-hidden shadow-lg"
+          >
             <div className="relative">
               <img
                 className="w-full"
