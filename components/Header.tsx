@@ -58,21 +58,27 @@ const Header = ({ setPopularMovies }: any) => {
   };
 
   const handleApplyFilters = async () => {
-    const filters = {
-      genres: selectedGenres,
-      languages: selectedLanguage,
-      releaseDateFrom,
-      releaseDateTo,
-      // userScoreMin,
-      // userScoreMax,
-    };
-    console.log("Filters:", filters);
-
     let response = await axios.get(
       `https://api.themoviedb.org/3/discover/movie?api_key=9294efc8e8a75f982b51880b836283e1&with_genres=${selectedGenres}&primary_release_date.gte=${releaseDateFrom}&primary_release_date.lte=${releaseDateTo}&language=${selectedLanguage}`
     );
     setPopularMovies(response.data.results);
   };
+
+  const resetFilter = async () => {
+    setSelectedGenres([]);
+    setReleaseDateFrom("");
+    setReleaseDateTo("");
+    setSelectedLanguage("");
+    try {
+      let response = await axios.get(
+        `https://api.themoviedb.org/3/movie/popular?api_key=9294efc8e8a75f982b51880b836283e1`
+      );
+      setPopularMovies(response?.data?.results);
+    } catch (error) {
+      console.log("Error while calling the api", error);
+    }
+  };
+
   return (
     <div>
       <div className="filter flex items-center justify-between sticky top-0 bg-white shadow-md z-50">
@@ -174,12 +180,18 @@ const Header = ({ setPopularMovies }: any) => {
           </div>*/}
 
           {/* Apply Filters Button */}
-          <div className="px-2 py-4">
+          <div className="px-2 py-4 gap-x-3 flex">
             <button
               onClick={handleApplyFilters}
               className="bg-blue-600 text-white py-2 px-4 rounded-md"
             >
-              Apply Filters
+              Apply
+            </button>
+            <button
+              onClick={resetFilter}
+              className="bg-blue-600 text-white py-2 px-4 rounded-md"
+            >
+              Reset
             </button>
           </div>
         </div>
