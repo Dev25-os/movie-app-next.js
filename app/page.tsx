@@ -14,7 +14,7 @@ export default function Home() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.BASE_URL}/movie/popular?api_key=${process.env.TMDB_API_KEY}&page=${page}`
+        `https://api.themoviedb.org/3/movie/popular?api_key=9294efc8e8a75f982b51880b836283e1&page=${page}`
       );
 
       // setPopularMovies(response.data.results);
@@ -62,7 +62,9 @@ export default function Home() {
         </div>
 
         <div className="flex items-center justify-between bg-blue-600  px-4 text-center text-white fixed bottom-0 w-full">
-          <Link href={"/favorites"} className="fav w-full text-center border-r border-white  py-2" 
+          <Link
+            href={"/favorites"}
+            className="fav w-full text-center border-r border-white  py-2"
           >
             <p>Favorite</p>
           </Link>
