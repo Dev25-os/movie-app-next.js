@@ -7,14 +7,20 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [popularMovies, setPopularMovies] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.BASE_URL}/popular?api_key=${process.env.TMDB_API_KEY}`
+        `${process.env.BASE_URL}/movie/popular?api_key=${process.env.TMDB_API_KEY}&page=${page}`
       );
 
-      setPopularMovies(response.data.results);
+      // setPopularMovies(response.data.results);
+      setPopularMovies([...popularMovies, ...response.data.results]);
+      console.log("ppp", response.data.total_pages);
+
+      setTotalPages(response.data.total_pages);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -22,6 +28,23 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
+  }, [page]);
+
+  const handleScroll = () => {
+    console.log("34");
+    let h = window.innerHeight + document.documentElement.scrollTop;
+    console.log(h);
+    console.log(document.documentElement.offsetHeight);
+
+    if (h > document.documentElement.offsetHeight - 1) {
+      if (page == totalPages) {
+        setPage((prev) => prev + 1);
+      }
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
